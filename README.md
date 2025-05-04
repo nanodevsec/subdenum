@@ -1,39 +1,40 @@
-# Subdomain Enumeration Automation Tool
+# Subdomain Enumeration Tool (subdenum)
 
-A powerful, multi-tool automation script for subdomain enumeration, built for bug bounty hunters, web pentesters, and CTF enthusiasts.
+A fast and flexible Bash-based subdomain enumeration toolkit that uses a wide range of tools and techniques to find, validate, and visualize subdomains for a target domain.
 
 ---
 
 ## 🚀 Features
 
-- Automatically discovers subdomains using multiple tools:
+- Multi-source subdomain enumeration using:
   - `amass`, `assetfinder`, `crt.sh`, `ffuf`, `findomain`, `puredns`, `subfinder`, `sublist3r`
-- Live subdomain filtering with `httpx`
-- Screenshot capture with `aquatone`
-- Merges and deduplicates results
-- Supports fast and deep scanning modes
-- Stores outputs in a clean directory structure
+- DNS brute forcing using `puredns` and a curated Seclists wordlist
+- HTTP probing using `httpx`
+- Screenshot automation using `aquatone`
+- Dynamic scan modes: `fast` and `deep`
+- Clean output organization in per-target directories
 
 ---
 
 ## 🛠 Requirements
 
-Install the following tools and make sure they're accessible in your `$PATH`:
+Make sure these tools are installed and available in your `$PATH`:
 
-- [`amass`](https://github.com/owasp-amass/amass)
 - [`assetfinder`](https://github.com/tomnomnom/assetfinder)
-- [`crt.sh`](https://crt.sh/)
-- [`curl`](https://curl.se/)
-- [`ffuf`](https://github.com/ffuf/ffuf)
-- [`findomain`](https://github.com/findomain/findomain)
 - [`jq`](https://stedolan.github.io/jq/)
-- [`massdns`](https://github.com/blechschmidt/massdns)
-- [`puredns`](https://github.com/d3mondev/puredns)
-- [`seclists`](https://github.com/danielmiessler/SecLists)
+- [`curl`](https://curl.se/)
 - [`subfinder`](https://github.com/projectdiscovery/subfinder)
 - [`sublist3r`](https://github.com/aboul3la/Sublist3r)
+- [`findomain`](https://github.com/findomain/findomain)
+- [`puredns`](https://github.com/d3mondev/puredns)
+- [`massdns`](https://github.com/blechschmidt/massdns)
+- [`ffuf`](https://github.com/ffuf/ffuf)
 - [`httpx`](https://github.com/projectdiscovery/httpx)
 - [`aquatone`](https://github.com/michenriksen/aquatone)
+- [`amass`](https://github.com/owasp-amass/amass) *(used in deep mode)*
+- [`seclists`](https://github.com/danielmiessler/SecLists)
+
+> ⚠️ The script uses the Seclists file `deepmagic.com-prefixes-top500.txt`. Ensure it exists at `/usr/share/seclists/Discovery/DNS/`.
 
 ---
 
@@ -41,84 +42,79 @@ Install the following tools and make sure they're accessible in your `$PATH`:
 
 1. Clone this repo or copy the script locally:
    ```bash
-   git clone https://github.com/yourusername/subdomain-toolkit.git
-   cd subdomain-toolkit
-   chmod +x subdomain_enum.sh
+   git clone https://github.com/yourusername/subdenum.git
+   cd subdenum
+   chmod +x subdenum.sh
    ```
 
-2. Update the following variables in the script if necessary:
-   - `WORDLIST` – location of your subdomain wordlist (defaults to SecLists)
-   - `RESOLVER` – path to your DNS resolvers file
+2. Update the `WORDLIST` and `RESOLVER` variables in the script if needed.
 
 ---
 
 ## ⚙️ Usage
 
 ```bash
-./subdomain_enum.sh <target-domain> <scan-mode>
+./subdenum.sh <target-domain> <scan-mode>
 ```
 
-- `<target-domain>` – The domain to scan (e.g. `example.com`)
-- `<scan-mode>` – Either `fast` or `deep`
-  - `fast`: skips `amass` for quicker scans
-  - `deep`: includes `amass` for comprehensive enumeration
+- `<target-domain>` – Domain you want to scan (e.g. `example.com`)
+- `<scan-mode>` – `fast` or `deep` (deep enables `amass`)
 
 Example:
 
 ```bash
-./subdomain_enum.sh example.com deep
+./subdenum.sh example.com deep
 ```
 
 ---
 
-## 📁 Output
+## 📁 Output Structure
 
-All outputs are saved under:
+All outputs are saved in:
 
 ```
 ~/data/<target-domain>/subdomain/
 ```
 
 Includes:
-- Individual tool results (`*.txt`)
-- `all.txt`: Merged & unique subdomains
-- `httpx.txt`: Live subdomains (status 200)
-- Aquatone screenshots and HTML report
+- One file per tool (`*.txt`)
+- `sort.txt`: merged, unique subdomains
+- `httpx.txt`: live subdomains with HTTP status
+- `aquatone/`: screenshots and HTML report
 
 ---
 
-## 📸 Aquatone Report
+## 📸 Visualization
 
-After execution, screenshots of live subdomains are saved to:
+After the scan completes:
 
-```
-aquatone/screenshots/
-```
-
-To view a full HTML report:
-```
-aquatone/aquatone_report.html
-```
+- View screenshots in:
+  ```
+  ~/data/<target-domain>/subdomain/aquatone/screenshots/
+  ```
+- HTML overview report:
+  ```
+  ~/data/<target-domain>/subdomain/aquatone/aquatone_report.html
+  ```
 
 ---
 
-## 💡 Tip for Creative Hackers
+## 💡 Pro Tips
 
-Experiment by:
-- Adding `dnsx`, `anubis`, or `github-subdomains`
-- Integrating with `notify` or `nuclei` for auto-alerts
-- Scheduling with cron for passive recon
+- Extend functionality by adding `dnsx`, `anubis`, or GitHub-based enumeration.
+- Use `notify` or `slack` scripts to get real-time results.
+- Automate regular scans with cronjobs or systemd timers.
 
 ---
 
 ## 📜 License
 
-Open-source for ethical hacking and educational use only.
+This project is open-source and intended for educational and ethical hacking use only.
 
 ---
 
-## 🧠 Learn More
+## 🧠 Stay Creative
 
-This tool is great for recon in Bug Bounty and Web Penetration Testing programs. Customize and extend it to suit your workflow.
+Explore, break, build, and learn. Tailor the script to your recon workflow for optimal results.
 
-Happy Hacking!
+Happy Hunting!
